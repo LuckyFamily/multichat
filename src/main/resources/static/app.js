@@ -28,7 +28,7 @@ function socOver(socket,socket2) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
-        },function(){
+        },function(error){
             socOver2(socket2);
         });
     });
@@ -40,7 +40,7 @@ function socOver2(socket) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
-        },function(){
+        },function(error){
             alert("servers are down!");
         });
     });
