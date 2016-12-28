@@ -16,13 +16,32 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('http://localhost:8080/gs-guide-websocket');
+    var socket2 = new SockJS('http://localhost:8081/gs-guide-websocket');
+    socOver(socket,socket2);
+}
+
+function socOver(socket,socket2) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
+        },function(){
+            socOver2(socket2);
+        });
+    });
+}
+function socOver2(socket) {
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        },function(){
+            alert("servers are down!");
         });
     });
 }
